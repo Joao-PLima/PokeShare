@@ -247,6 +247,16 @@ ipcMain.on('windowLogin:requestLogin', (e, data) => {
 });
 
 
+ipcMain.on('windowLogin:createAccount', (e, data) => {
+  console.log("ayy");
+  daoHandler.createAccount(data.username, data.password, data.username, data.email, 'user', 'false', () => {
+    console.log("YESSSSSSSSSSSSSSSSS")
+    mainWindow.webContents.send('createAccount:success');
+  }, () => {
+    console.log("NOOOOOOOOOOOO");
+    mainWindow.webContents.send('createAccount:failed');
+  })
+});
 
 
 
@@ -294,6 +304,20 @@ ipcMain.on('windowAdmin:buildReport', function(e, data){
   })
 
 })
+
+
+
+
+
+
+
+
+
+ipcMain.on('likesDiff', function(e, data){
+  daoHandler.updateLikes(data.postId, data.numLikes);
+
+})
+
 
 
 

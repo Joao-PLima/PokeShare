@@ -163,7 +163,13 @@
         iframe.postMessage(postsObj)
       })
 
-      window.ipcHandler.send('requestAllPosts')
+      window.setTimeout(function(){
+        window.ipcHandler.send('requestAllPosts')
+      }, 1000);
+
+      // window.setTimeout(function(){
+      //   console.log("FFFFFFFFFFFFFFFFFFFFFFFFF")
+      // }, 10000);
 
       // function crossFrameSend(msg, data){
       //   window.ipcHandler.send(msg, data)

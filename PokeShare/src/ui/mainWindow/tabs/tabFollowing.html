@@ -13,6 +13,10 @@
         margin: 10px;
       }
 
+      .profileItem {
+        margin-top: 10px
+      }
+
       .post-container {
         width: 70%;
         height: 300px;
@@ -20,20 +24,34 @@
         /* margin-left: 20px; */
         border: 2px solid black;
         border-radius: 5%;
+        background-color: #F0F0F0;
       }
 
       .post-info-container {
-        width: 50%;
+        width: 70%;
         height: 80%;
         float: left;
         /* border: 3px solid black; */
       }
 
       .post-image-container {
-        width: 50%;
+        width: 30%;
         height: 100%;
         float: left;
         /* border: 3px solid red; */
+      }
+
+      .post-likes-container {
+        width: 50%;
+        height: 30%;
+        position: relative;
+        font-size: 150%;
+        bottom: 60px;
+        left: 20px;
+      }
+
+      .btnLikes {
+        border: none;
       }
 
       .post-footer-container {
@@ -47,12 +65,13 @@
         height: 90%;
         border: 2px solid black;
         border-radius: 10%;
-        background: black;
-        overflow: scroll;
+        background: lightblue;
+        /* overflow: scroll; */
       }
 
       .post-image img {
-        height: 200%;
+        width: 296*0.9;
+        height: 90%;
       }
 
       .poster-account {
@@ -123,7 +142,8 @@
     <h1>Following</h1>
 
     <div id="feedContainer">
-      <div id="test1"></div>
+      Loading posts...
+      <!-- <div id="test1"></div>
       <div class="post-container">
         <div class="post-info-container">
           <div class="poster-account">
@@ -141,7 +161,7 @@
           </div>
         </div>
         <div class="post-footer-container"></div>
-      </div>
+      </div> -->
     </div>
 
     <script src="tabHomeScript.js"></script>
@@ -154,6 +174,33 @@
 
       var eventHandlers = {
 
+      }
+
+      function setupButtonListeners(){
+        $(".btnLikes").click(function(){
+          var likesDiff = 0;
+          if($(this).html() == "♥"){
+            $(this).html("♡")
+            likesDiff = -1;
+          } else {
+            $(this).html("♥")
+            likesDiff = 1;
+          }
+          var spanLikes = $(this).parent().find(".numLikes")
+          var numLikes = parseInt(spanLikes.html().split(" ")[1]);
+          numLikes += likesDiff;
+          //console.log(numLikes);
+          spanLikes.html(" "+numLikes+" Likes")
+
+          var id = parseInt($(this).parent().parent().parent().parent().attr('id').slice(4));
+
+          ipcSend('likesDiff', {
+            postId: id,
+            numLikes: numLikes
+          });
+
+          console.log(id);
+        })
       }
 
       var allPostsF = []
@@ -176,8 +223,14 @@
           }
           console.log("AllPosts recieved")
 
-          console.log(allPostsF)
-          setVisualPosts()
+          if(allPostsF.length == 0){
+            $("#feedContainer").html("<h5>No posts found</h5>")
+          } else {
+            $("#feedContainer").html("")
+            console.log(allPostsF)
+            setVisualPosts()
+          }
+
         }
       };
 
@@ -192,6 +245,7 @@
             message: allPostsF[i].description
           });
         }
+        setupButtonListeners();
       }
 
 

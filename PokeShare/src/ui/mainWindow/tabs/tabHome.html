@@ -20,25 +20,40 @@
         /* margin-left: 20px; */
         border: 2px solid black;
         border-radius: 5%;
+        background-color: #F0F0F0;
       }
 
       .post-info-container {
-        width: 50%;
+        width: 70%;
         height: 80%;
         float: left;
         /* border: 3px solid black; */
       }
 
-      .post-image-container {
+      .post-likes-container {
         width: 50%;
+        height: 30%;
+        position: relative;
+        font-size: 150%;
+        bottom: 60px;
+        left: 20px;
+      }
+
+      .btnLikes {
+        border: none;
+      }
+
+      .post-image-container {
+        width: 30%;
         height: 100%;
         float: left;
         /* border: 3px solid red; */
       }
 
       .post-footer-container {
-        height: 100%;
+        height: 20%;
         float: none;
+        /* border: 3px solid red; */
       }
 
       .post-image {
@@ -47,12 +62,13 @@
         height: 90%;
         border: 2px solid black;
         border-radius: 10%;
-        background: black;
-        overflow: scroll;
+        background: lightblue;
+        /* overflow: scroll; */
       }
 
       .post-image img {
-        height: 200%;
+        width: 296*0.9;
+        height: 90%;
       }
 
       .poster-account {
@@ -120,7 +136,8 @@
     <!-- <image id="imgTest" style="height: 100px; width: 100px"></image> -->
 
     <div id="feedContainer">
-      <div id="test1"></div>
+      Loading posts...
+      <!-- <div id="test1"></div>
       <div class="post-container">
         <div class="post-info-container">
           <div class="poster-account">
@@ -131,14 +148,18 @@
             </div>
           </div>
           <div class="post-msg">Testtestttesttesttset</div>
+          <div class="numLikesContainer post-likes-container">
+            <div><button class="btnLikes">♡</button><span class="numLikes"> 22 likes ♥</span></div>
+          </div>
         </div>
         <div class="post-image-container">
           <div class="post-image">
             <img class="" src="../../images/charizardCard.jpg" alt="">
           </div>
         </div>
-        <div class="post-footer-container"></div>
-      </div>
+        <div class="post-footer-container">
+        </div>
+      </div> -->
     </div>
 
     <script src="tabHomeScript.js"></script>
@@ -154,6 +175,36 @@
 
       }
 
+      //setupButtonListeners();
+
+      function setupButtonListeners(){
+        $(".btnLikes").click(function(){
+          var likesDiff = 0;
+          if($(this).html() == "♥"){
+            $(this).html("♡")
+            likesDiff = -1;
+          } else {
+            $(this).html("♥")
+            likesDiff = 1;
+          }
+          var spanLikes = $(this).parent().find(".numLikes")
+          var numLikes = parseInt(spanLikes.html().split(" ")[1]);
+          numLikes += likesDiff;
+          //console.log(numLikes);
+          spanLikes.html(" "+numLikes+" Likes")
+
+          var id = parseInt($(this).parent().parent().parent().parent().attr('id').slice(4));
+
+          ipcSend('likesDiff', {
+            postId: id,
+            numLikes: numLikes
+          });
+
+          console.log(id);
+        })
+      }
+
+
       var allPosts = []
 
       window.onmessage = function(e) {
@@ -166,9 +217,16 @@
           for(var i = 0; i < e.data.allPosts.length; i++){
             allPosts.push(e.data.allPosts[i])
           }
+
           console.log("AllPosts recieved")
-          console.log(allPosts)
-          setVisualPosts()
+
+          if(allPosts.length == 0){
+            $("#feedContainer").html("<h5>No posts found</h5>")
+          } else {
+            $("#feedContainer").html("")
+            console.log(allPosts)
+            setVisualPosts()
+          }
         }
       };
 
@@ -180,9 +238,11 @@
             usertag: allPosts[i].usertag,
             imgtype: 'web', //instead of 'local'
             imgpath: allPosts[i].pokemonApiData.sprite_shiny, //"charizard",
-            message: allPosts[i].description
+            message: allPosts[i].description,
+            likes: allPosts[i].likes
           });
         }
+        setupButtonListeners();
       }
 
 

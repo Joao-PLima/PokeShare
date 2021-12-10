@@ -1,5 +1,6 @@
 var postInfoContainer = "<div class=\"post-info-container\"><div class=\"poster-account\"><div class=\"account-image\"></div><div class=\"account-info\"><div class=\"account-name\">Placeholder</div>";
-postInfoContainer += "<div class=\"account-tag\">@placeholder</div></div></div><div class=\"post-msg\"></div></div><div class=\"post-image-container\"><div class=\"post-image\"><img class=\"\" src=\"../../images/placeholder.jpg\" alt=\"\"></div></div>";
+postInfoContainer += "<div class=\"account-tag\">@placeholder</div></div></div><div class=\"post-msg\"></div><div class=\"post-likes-container\"><div><button class=\"btnLikes\">♡</button><span class=\"numLikes\"></span></div></div>"
+postInfoContainer += "</div><div class=\"post-image-container\"><div class=\"post-image\"><img class=\"\" src=\"../../images/placeholder.jpg\" alt=\"\"></div></div>";
 postInfoContainer += "<div class=\"post-footer-container\"></div>"
 
 var imgPathTemplate = ["../../images/", "Card.jpg"]
@@ -62,14 +63,15 @@ function createDiv(classes, id){
   return resultDiv;
 }
 
-createNewPost({
-  containerid: 1,
-  username: "Joseph",
-  usertag: "josephthedude",
-  imgtype: 'local',
-  imgpath: "squirtle",
-  message: "Test description for post"
-});
+// createNewPost({
+//   containerid: 1,
+//   username: "Joseph",
+//   usertag: "josephthedude",
+//   imgtype: 'local',
+//   imgpath: "squirtle",
+//   message: "Test description for post",
+//   likes: 20
+// });
 
 function createNewPost(postData){
   containerId = "post"+postData.containerid;
@@ -85,6 +87,9 @@ function createNewPost(postData){
     postContainer.find(".post-image-container > .post-image > img").attr("src", postData.imgpath)
   }
   postContainer.find(".post-info-container > .post-msg").html(postData.message)
+  //console.log(postData.likes);
+  //console.log(((postData?.likes != null && postData.likes > 0) ? postData.likes : 0) + " Likes");
+  postContainer.find(".post-info-container > .post-likes-container > div > .numLikes").html(" " + ((postData?.likes != null && postData.likes > 0) ? postData.likes : 0) + " Likes")
 
   // console.log(postContainer);
 }

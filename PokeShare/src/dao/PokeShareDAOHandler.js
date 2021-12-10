@@ -75,7 +75,7 @@ class PokeShareDAOHandler {
       let success = results.rows;
       if(success.length > 0){
         callbackSuccess(success);
-      } else callbackFail();
+      } else callbackSuccess([]);
       await dao.end();
       dao = null;
     }
@@ -137,6 +137,24 @@ class PokeShareDAOHandler {
       throw err;
     }
   }
+
+
+  async updateLikes(postId, numLikes){
+    try{
+      let dao = new PokeShareDAO();
+      await dao.connect();
+      // const posts = await dao.query(`SELECT postid, userid, description, to_char(date, 'DD/MM/YYYY HH24:mi:ss') AS date, likes, pokeid, isholo FROM posts`);
+      // const posts = await dao.query(`SELECT p.postid, u.userid, u.username AS usertag, u.name AS username, p.description, to_char(p.date, 'DD/MM/YYYY HH24:mi:ss') AS date, p.likes, p.pokeid, p.isholo FROM posts p, useracc u WHERE p.userid = u.userid`);
+      const posts = await dao.query(`UPDATE posts SET likes = ${numLikes} WHERE postId=${postId}`);
+      await dao.end();
+      dao = null;
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+
 
   async getAllPosts(callbackSuccess, callbackFail = function(){}){
     try{

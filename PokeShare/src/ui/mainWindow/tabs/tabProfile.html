@@ -24,6 +24,7 @@
         /* margin-left: 20px; */
         border: 2px solid black;
         border-radius: 5%;
+        background-color: #F0F0F0;
       }
 
       .post-info-container {
@@ -38,6 +39,19 @@
         height: 100%;
         float: left;
         /* border: 3px solid red; */
+      }
+
+      .post-likes-container {
+        width: 50%;
+        height: 30%;
+        position: relative;
+        font-size: 150%;
+        bottom: 60px;
+        left: 20px;
+      }
+
+      .btnLikes {
+        border: none;
       }
 
       .post-footer-container {
@@ -164,7 +178,8 @@
     <hr>
 
     <div id="feedContainer">
-      <div id="test1"></div>
+      Loading posts...
+      <!-- <div id="test1"></div>
       <div class="post-container">
         <div class="post-info-container">
           <div class="poster-account">
@@ -182,7 +197,7 @@
           </div>
         </div>
         <div class="post-footer-container"></div>
-      </div>
+      </div> -->
     </div>
 
     <script src="tabHomeScript.js"></script>
@@ -196,6 +211,33 @@
 
       var eventHandlers = {
 
+      }
+
+      function setupButtonListeners(){
+        $(".btnLikes").click(function(){
+          var likesDiff = 0;
+          if($(this).html() == "♥"){
+            $(this).html("♡")
+            likesDiff = -1;
+          } else {
+            $(this).html("♥")
+            likesDiff = 1;
+          }
+          var spanLikes = $(this).parent().find(".numLikes")
+          var numLikes = parseInt(spanLikes.html().split(" ")[1]);
+          numLikes += likesDiff;
+          //console.log(numLikes);
+          spanLikes.html(" "+numLikes+" Likes")
+
+          var id = parseInt($(this).parent().parent().parent().parent().attr('id').slice(4));
+
+          ipcSend('likesDiff', {
+            postId: id,
+            numLikes: numLikes
+          });
+
+          console.log(id);
+        })
       }
 
       var allPosts = []
@@ -217,8 +259,14 @@
             }
           }
           console.log("AllPosts recieved")
-          console.log(allPosts)
-          setVisualPosts()
+
+          if(allPosts.length == 0){
+            $("#feedContainer").html("<h5>No posts found</h5>")
+          } else {
+            $("#feedContainer").html("")
+            console.log(allPosts)
+            setVisualPosts()
+          }
         }
       };
 
@@ -233,6 +281,7 @@
             message: allPosts[i].description
           });
         }
+        setupButtonListeners();
       }
 
 

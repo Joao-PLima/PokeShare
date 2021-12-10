@@ -46,24 +46,25 @@
   </head>
   <body>
     <div>
-      <form class="formContainer">
+      <div class="formContainer">
         <div class="form-group">
-          <label for="username">Username or Email</label>
+          <label for="username" id="labelUsername">Username or Email</label>
           <input class="form-control" type="text" name="username" id="inputUsername" placeholder="">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input class="form-control" type="password" name="password" id="inputPassword">
         </div>
-        <div class="form-group" hidden>
+        <div id="fieldEmail" class="form-group" hidden>
           <label for="email">Email</label>
           <input class="form-control" type="email" name="email" id="inputEmail">
         </div>
         <div class="form-group">
-          <button id="btnLogin" class="btn btn-danger btnLogin" type="sumbit" name="login">Log in</button>
-          <button class="btn btn-danger btnSignin" type="sumbit" name="sign in">Sign in</button>
+          <button id="btnLogin" class="btn btn-danger btnLogin" name="login">Log in</button>
+          <button id="btnSignin" class="btn btn-danger btnSignin" name="sign in">Sign in</button>
         </div>
-      </form>
+      </div>
+      <div id="resultInfo"></div>
     </div>
 
     <script type="text/javascript">
@@ -82,13 +83,50 @@
         // $(".formContainer").css("width", (loginWidth*100)+"%")
         // $(".formContainer").css("height", (loginHeight*100)+"%")
       }
+      var operationType = "login";
+
+      console.log(operationType)
+      console.log("aa")
+
 
       $("#btnLogin").click(function(){
-        var obj = {
-          username: $("#inputUsername").val(),
-          password: $("#inputPassword").val()
+        if(operationType == "login"){
+          var obj = {
+            username: $("#inputUsername").val(),
+            password: $("#inputPassword").val()
+          }
+          window.ipcHandler.send("windowLogin:requestLogin", obj);
+        } else {
+          operationType = "login"
+          $("#fieldEmail").attr('hidden', true)
+          $("#labelUsername").html("Username or Email")
+          $(".formContainer").css("height","296px")
         }
-        window.ipcHandler.send("windowLogin:requestLogin", obj);
+      });
+
+      $("#btnSignin").click(function(){
+        console.log(operationType)
+        if(operationType == "signin"){
+          var obj = {
+            username: $("#inputUsername").val(),
+            password: $("#inputPassword").val(),
+            email: $("#inputEmail").val()
+          }
+          window.ipcHandler.send("windowLogin:createAccount", obj);
+        } else {
+          operationType = "signin"
+          $("#fieldEmail").removeAttr('hidden')
+          $("#labelUsername").html("Username")
+          $(".formContainer").css("height","346px")
+        }
+      });
+
+      window.ipcHandler.on('createAccount:success', () => {
+        operationType = "login"
+        $("#fieldEmail").attr('hidden', true)
+        $("#labelUsername").html("Username or Email")
+        $(".formContainer").css("height","296px")
+        $("#resultInfo").html("Account created")
       });
 
 
