@@ -1,6 +1,8 @@
 //library 'pg' para node - conexão com o servidor pgAdmin
 const { Client } = require('pg');
 const phasher = require('./PHasher.js');
+const PokeShareDBCreator = require('./PokeShareDBCreator.js');
+const dbCreator = new PokeShareDBCreator();
 let instance;
 instance = instance ?? null;
 let connectedUser;
@@ -9,7 +11,7 @@ connectedUser = connectedUser ?? null;
 class PokeShareDAOHandler {
 
   constructor(){
-
+    dbCreator.createDBIfNeeded(PokeShareDAO)
   }
 
   disconnectUser(){

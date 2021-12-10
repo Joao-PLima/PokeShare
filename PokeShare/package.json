@@ -18,5 +18,8 @@
     "pokeapi": "^0.0.1",
     "pokedex-promise-v2": "^3.3.2",
     "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^15.4.0"
   }
 }
