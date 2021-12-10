@@ -74,7 +74,10 @@ async function sendAllPostsWithApiData(data, isDashboardWindow = false){
   if(isDashboardWindow){
     windowDashboard.webContents.send('dashboard:posts', allPosts)
   } else {
-    mainWindow.webContents.send('getAllPosts:success', allPosts)
+    mainWindow.webContents.send('getAllPosts:success', {
+      allPosts: allPosts,
+      userFollowing: loggedUser.following
+    })
   }
 }
 
@@ -207,8 +210,11 @@ function createWindow(key){
 ///////////////////////
 var loggedUser = {
   id: -1,
-  isAdmin: false
+  isAdmin: false,
+  following: []
 }
+
+
 
 ipcMain.on('windowLogin:requestLogin', (e, data) => {
   // console.log("ayy");
@@ -222,6 +228,7 @@ ipcMain.on('windowLogin:requestLogin', (e, data) => {
     daoHandler.getFollowing(user.userid, (following) => {
 
       user.following = following
+      loggedUser.following = following
 
       console.log("FFFFFFFFFFFFFFFFFFFFFFFFF")
       console.log(following)

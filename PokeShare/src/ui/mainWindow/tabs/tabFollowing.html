@@ -75,7 +75,7 @@
       }
 
       .poster-account {
-        width: 200px;
+        width: 300px;
         height: 54px;
         margin-left: 20px;
         margin-top: 20px;
@@ -203,46 +203,50 @@
         })
       }
 
-      var allPostsF = []
+      var allPosts = []
 
       window.onmessage = function(e) {
         console.log("5555555555555555")
         console.log(e.data)
-        allPostsF = []
+        allPosts = []
         if(e.data.type == 'trigger'){
           let tempFunc = eventHandlers[e.data.msg]
           tempFunc(e.data.e, e.data.data)
         } else if(e.data.type == 'allPosts'){
+          console.log(e.data.userFollowing);
+          setFollowing(e.data.userFollowing);
           for(var i = 0; i < e.data.allPosts.length; i++){
             loopInner: for(var j = 0; j < userinfo.following.length; j++) {
               if(e.data.allPosts[i].userid == userinfo.following[j].followed){
-                allPostsF.push(e.data.allPosts[i])
+                allPosts.push(e.data.allPosts[i])
                 break loopInner
               }
             }
           }
           console.log("AllPosts recieved")
 
-          if(allPostsF.length == 0){
+          if(allPosts.length == 0){
             $("#feedContainer").html("<h5>No posts found</h5>")
           } else {
             $("#feedContainer").html("")
-            console.log(allPostsF)
+            console.log(allPosts)
             setVisualPosts()
           }
 
         }
       };
 
+
       function setVisualPosts(){
-        for(var i = 0; i < allPostsF.length; i++){
+        for(var i = 0; i < allPosts.length; i++){
           createNewPost({
             containerid: i+2,
-            username: allPostsF[i].username,
-            usertag: allPostsF[i].usertag,
+            userid: allPosts[i].userid,
+            username: allPosts[i].username,
+            usertag: allPosts[i].usertag,
             imgtype: 'web', //instead of 'local'
-            imgpath: allPostsF[i].pokemonApiData.sprite_shiny, //"charizard",
-            message: allPostsF[i].description
+            imgpath: allPosts[i].pokemonApiData.sprite_shiny, //"charizard",
+            message: allPosts[i].description
           });
         }
         setupButtonListeners();

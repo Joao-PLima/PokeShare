@@ -48,6 +48,11 @@ function onIpcReady(){
   // console.log(ipcHandlerFuncs);
 }
 
+var following = []
+
+function setFollowing(tempFollowing){
+  following = tempFollowing
+}
 
 
 
@@ -90,6 +95,21 @@ function createNewPost(postData){
   //console.log(postData.likes);
   //console.log(((postData?.likes != null && postData.likes > 0) ? postData.likes : 0) + " Likes");
   postContainer.find(".post-info-container > .post-likes-container > div > .numLikes").html(" " + ((postData?.likes != null && postData.likes > 0) ? postData.likes : 0) + " Likes")
+  var isFollowed = false
+
+  if(postData?.userid != null){
+    for(index in following){
+      if(postData.userid == following[index].followed){
+        isFollowed = true
+        var accName = accountContainer.find(".account-info > .account-name")
+        accName.html(accName.html() + " <span style=\"font-weight: normal; font-size: 90%\">(following)</span>")
+        break;
+      }
+    }
+  }
+
+  console.log("IS FOLLOWED: user "+postData?.userId+" - "+isFollowed)
+
 
   // console.log(postContainer);
 }

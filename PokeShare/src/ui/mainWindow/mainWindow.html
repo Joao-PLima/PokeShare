@@ -150,15 +150,17 @@
 
       window.ipcHandler.on('getAllPosts:success', (e, data) => {
         console.log('reachedPosts')
-        console.log(data)
+        console.log(data.allPosts)
+        console.log(data.userFollowing)
         allPosts = [];
-        for(var i = 0; i < data.length; i++){
-          allPosts.push(data[i])
+        for(var i = 0; i < data.allPosts.length; i++){
+          allPosts.push(data.allPosts[i])
         }
         console.log(allPosts)
         var postsObj = {
           type: 'allPosts',
-          allPosts: allPosts
+          allPosts: allPosts,
+          userFollowing: data.userFollowing
         }
         iframe.postMessage(postsObj)
       })
