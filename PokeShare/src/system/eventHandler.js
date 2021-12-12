@@ -20,7 +20,6 @@ var mainWindow;
 
 
 
-var imgTestBinString = '';
 
 app.on('ready', () => {
   process.on('uncaughtException', function(err, e, e2) {
@@ -36,14 +35,6 @@ app.on('ready', () => {
     daoHandler.addError(err.toString());
   });
   createWindow('login');
-  imgTestBinString = "";
-  // daoHandler.getimgtest(function(result){
-  //   imgTestBinString = result;
-  //   // console.log("imgTestBinString");
-  //   // console.log(imgTestBinString);
-  // }, function(){
-  //   console.log("N deu");
-  // })
 
 });
 
@@ -240,9 +231,6 @@ ipcMain.on('windowLogin:requestLogin', (e, data) => {
       // console.log("aaaaaaa");
       mainWindow.on('ready-to-show', function(){
         // console.log("bbbbbbb");
-        imgTestUser = user
-        imgTestUser.imgTest = imgTestBinString
-        // console.log(imgTestUser);
         console.log("AAAAAAAA");
         console.log(user);
         mainWindow.webContents.send('user', user)

@@ -1,7 +1,7 @@
 module.exports = {
   user: "postgres",
-  password: "pgsLostTheGame",
+  password: "password",
   host: "localhost",
-  port: 9786,
+  port: 5432,
   database: "PokeShare"
 }
