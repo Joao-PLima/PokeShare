@@ -65,7 +65,7 @@ class PokeShareDAOHandler {
       dao = null;
     }
     catch(err){
-      throw err;
+      console.log(err);
     }
   }
 
@@ -82,7 +82,7 @@ class PokeShareDAOHandler {
       dao = null;
     }
     catch(err){
-      throw err;
+      console.log(err);
     }
 
   }
@@ -100,7 +100,7 @@ class PokeShareDAOHandler {
       dao = null;
     }
     catch(err){
-      throw err;
+      console.log(err);
     }
   }
 
@@ -117,7 +117,7 @@ class PokeShareDAOHandler {
       dao = null;
     }
     catch(err){
-      throw err;
+      console.log(err);
     }
   }
 
@@ -136,7 +136,7 @@ class PokeShareDAOHandler {
       dao = null;
     }
     catch(err){
-      throw err;
+      console.log(err);
     }
   }
 

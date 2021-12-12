@@ -1,5 +1,5 @@
-const { Client } = require('pg');
-const phasher = require('./PHasher.js');
+// const { Client } = require('pg');
+// const phasher = require('./PHasher.js');
 
 
 
@@ -11,10 +11,6 @@ class PokeShareDBCreator {
 
   }
 
-  async compareHashed(password, hashedPassword){
-    return await phasher.compare(password, hashedPassword);
-  }
-
   async createDBIfNeeded(PokeShareDAO){
     try{
       let dao = new PokeShareDAO();
@@ -23,7 +19,10 @@ class PokeShareDBCreator {
         await dao.query(`SELECT * FROM useracc`);
         await dao.end();
       } catch (error) {
-        await dao.connect();
+        var dont = true
+        if(dont){
+          return;
+        }
         await dao.query(`CREATE TABLE posts (
           postid SERIAL NOT NULL,
           userid integer NOT NULL,
