@@ -1,6 +1,4 @@
-// const { Client } = require('pg');
-// const phasher = require('./PHasher.js');
-
+const phasher = require('./PHasher.js');
 
 
 
@@ -15,11 +13,15 @@ class PokeShareDBCreator {
     try{
       let dao = new PokeShareDAO();
       try {
+        console.log("AAAAA1");
         await dao.connect();
-        await dao.query(`SELECT * FROM useracc`);
+        let x = await dao.query(`SELECT * FROM useracc`);
+        let y = x.rows;
         await dao.end();
+        console.log("AAAAA2");
       } catch (error) {
-        var dont = true
+        console.log("AAAAA3");
+        var dont = false
         if(dont){
           return;
         }
@@ -181,8 +183,10 @@ class PokeShareDBCreator {
                         ADD CONSTRAINT comments_userid_fkey FOREIGN KEY (userid) REFERENCES useracc(userid);`);
                         await dao.query(`ALTER TABLE ONLY comments
                           ADD CONSTRAINT comments_postid_fkey FOREIGN KEY (postid) REFERENCES posts(postid);`);
-                          await dao.query(`INSERT INTO useracc VALUES(1,'Professor Oak','0000','Samuel Oak','professoroak@gmail.com','admin','false');`);
+                          var passwordAdminHashed = await phasher.hash('0000')
+                          await dao.query(`INSERT INTO useracc VALUES(1,'Professor Oak','${passwordAdminHashed}','Samuel Oak','professoroak@gmail.com','admin','false');`);
                           await dao.end();
+                          console.log("AAAAA4");
       }}catch(error){
         console.log(error);
       }

@@ -3,6 +3,8 @@ const { Client } = require('pg');
 const phasher = require('./PHasher.js');
 const PokeShareDBCreator = require('./PokeShareDBCreator.js');
 const dbCreator = new PokeShareDBCreator();
+const dbInfo = require('./DatabaseInfo.js')
+
 let instance;
 instance = instance ?? null;
 let connectedUser;
@@ -268,13 +270,7 @@ class PokeShareDAOHandler {
 class PokeShareDAO {
 
   constructor(){
-    this.connection = new Client({
-      user: "postgres",
-      password: "pgsLostTheGame",
-      host: "localhost",
-      port: 9786,
-      database: "PokeShare"
-    });
+    this.connection = new Client(dbInfo);
     this.isConnected = false;
   }
 

@@ -36,13 +36,14 @@ app.on('ready', () => {
     daoHandler.addError(err.toString());
   });
   createWindow('login');
-  daoHandler.getimgtest(function(result){
-    imgTestBinString = result;
-    // console.log("imgTestBinString");
-    // console.log(imgTestBinString);
-  }, function(){
-    console.log("N deu");
-  })
+  imgTestBinString = "";
+  // daoHandler.getimgtest(function(result){
+  //   imgTestBinString = result;
+  //   // console.log("imgTestBinString");
+  //   // console.log(imgTestBinString);
+  // }, function(){
+  //   console.log("N deu");
+  // })
 
 });
 
